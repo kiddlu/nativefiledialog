@@ -13,8 +13,8 @@ endif
 ifeq ($(config),release_x64)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/test_opendialog.exe
-  OBJDIR = ../obj/x64/Release/test_opendialog
+  TARGET = $(TARGETDIR)/test_nfd.exe
+  OBJDIR = ../obj/x64/Release/test_nfd
   DEFINES += -DNDEBUG
   INCLUDES += -I../../src/include
   FORCE_INCLUDE +=
@@ -40,8 +40,8 @@ endif
 ifeq ($(config),release_x86)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/test_opendialog.exe
-  OBJDIR = ../obj/x86/Release/test_opendialog
+  TARGET = $(TARGETDIR)/test_nfd.exe
+  OBJDIR = ../obj/x86/Release/test_nfd
   DEFINES += -DNDEBUG
   INCLUDES += -I../../src/include
   FORCE_INCLUDE +=
@@ -67,8 +67,8 @@ endif
 ifeq ($(config),debug_x64)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/test_opendialog_d.exe
-  OBJDIR = ../obj/x64/Debug/test_opendialog
+  TARGET = $(TARGETDIR)/test_nfd_d.exe
+  OBJDIR = ../obj/x64/Debug/test_nfd
   DEFINES += -DDEBUG
   INCLUDES += -I../../src/include
   FORCE_INCLUDE +=
@@ -94,8 +94,8 @@ endif
 ifeq ($(config),debug_x86)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/test_opendialog_d.exe
-  OBJDIR = ../obj/x86/Debug/test_opendialog
+  TARGET = $(TARGETDIR)/test_nfd_d.exe
+  OBJDIR = ../obj/x86/Debug/test_nfd
   DEFINES += -DDEBUG
   INCLUDES += -I../../src/include
   FORCE_INCLUDE +=
@@ -119,7 +119,7 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/test_opendialog.o \
+	$(OBJDIR)/test_nfd.o \
 
 RESOURCES := \
 
@@ -134,7 +134,7 @@ ifeq (/bin,$(findstring /bin,$(SHELL)))
 endif
 
 $(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking test_opendialog
+	@echo Linking test_nfd
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(TARGETDIR)
 else
@@ -144,7 +144,7 @@ endif
 	$(POSTBUILDCMDS)
 
 clean:
-	@echo Cleaning test_opendialog
+	@echo Cleaning test_nfd
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -171,7 +171,7 @@ endif
 	$(SILENT) $(CC) -x c-header $(ALL_CFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 endif
 
-$(OBJDIR)/test_opendialog.o: ../../test/test_opendialog.c
+$(OBJDIR)/test_nfd.o: ../../test/test_nfd.c
 	@echo $(notdir $<)
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(OBJDIR)
