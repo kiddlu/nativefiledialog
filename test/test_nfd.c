@@ -5,10 +5,10 @@
 
 #include "nfd.h"
 
-int cmd_open_dialog(void)
+int cmd_open_dialog(char *filter)
 {
     nfdchar_t *outPath = NULL;
-    nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath );
+    nfdresult_t result = NFD_OpenDialog(filter, NULL, &outPath );
     if ( result == NFD_OKAY )
     {
         //puts("Success!");
@@ -29,10 +29,10 @@ int cmd_open_dialog(void)
 
 }
 
-int cmd_open_dialog_multiple(void)
+int cmd_open_dialog_multiple(char *filter)
 {
     nfdpathset_t pathSet;
-    nfdresult_t result = NFD_OpenDialogMultiple( NULL, NULL, &pathSet );
+    nfdresult_t result = NFD_OpenDialogMultiple( filter, NULL, &pathSet );
     if ( result == NFD_OKAY )
     {
         size_t i;
@@ -56,7 +56,7 @@ int cmd_open_dialog_multiple(void)
     }
 }
 
-int cmd_pick_folder(void)
+int cmd_pick_folder(char *filter)
 {
     nfdchar_t *outPath = NULL;
     nfdresult_t result = NFD_PickFolder( NULL, &outPath );
@@ -80,10 +80,10 @@ int cmd_pick_folder(void)
 
 }
 
-int cmd_save_dialog(void)
+int cmd_save_dialog(char *filter)
 {
     nfdchar_t *savePath = NULL;
-    nfdresult_t result = NFD_SaveDialog( NULL, NULL, &savePath );
+    nfdresult_t result = NFD_SaveDialog( filter, NULL, &savePath );
     if ( result == NFD_OKAY )
     {
         //puts("Success!");
@@ -103,7 +103,7 @@ int cmd_save_dialog(void)
     }
 }
 
-int cmd_help(void)
+int cmd_help(char *filter)
 {
    printf("dialog   : open dialog\n");
    printf("multiple : open dialog multiple\n");
@@ -116,7 +116,7 @@ int cmd_help(void)
 struct command
 {
   char *name;
-  int (*run)(void);
+  int (*run)(char *filter);
 };
 
 static struct command cmds[] = {
@@ -137,18 +137,21 @@ int main(int argc, char **argv)
   errno = 0;
 
   if(argc < 2) {
-    cmd_help();
+    cmd_help(NULL);
     goto out;
   }
 
   for(i = 0; i<ARRAY_SIZE(cmds); i++) {
-    if(strcmp(argv[1], cmds[i].name) == 0) {
-      ret = cmds[i].run();
+    if(strncmp(argv[1], cmds[i].name, strlen(cmds[i].name)) == 0) {
+      if(argc == 2)
+        ret = cmds[i].run(NULL);
+      else
+        ret = cmds[i].run(argv[2]);
       goto out;
     }
   }
   
-  cmd_help();
+  cmd_help(NULL);
 out:
   return ret;
 }
